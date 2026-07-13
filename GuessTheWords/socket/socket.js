@@ -2,132 +2,184 @@ const playerManager = require("../game/playerManager");
 const gameManager = require("../game/gameManager");
 const gameState = require("../game/gameState");
 
-module.exports = (io)=>{
+module.exports = (io) => {
 
     gameManager.initialize(io);
 
     let countdownRunning = false;
+    let countdownTimer = null;
 
-    io.on("connection",(socket)=>{
+
+    io.on("connection", (socket) => {
 
         console.log(
-            "Player connected:",
+            "PLAYER CONNECTED:",
             socket.id
         );
 
-        socket.on("joinGame",(username)=>{
+
+        socket.on("joinGame", (username) => {
 
             socket.username = username;
 
-            const player = playerManager.addPlayer(
+
+            const player =
+            playerManager.addPlayer(
                 socket.id,
                 username
             );
 
+
             if(player){
+
                 player.score = 0;
+
             }
 
+
             sendLobbyUpdate();
+
             checkStart();
+
 
         });
 
-        socket.on("registerGamePlayer",(username)=>{
 
-    console.log(
-        "REGISTER GAME PLAYER:",
-        username,
-        socket.id
-   );
 
-    socket.username = username;
+        socket.on("registerGamePlayer", (username) => {
 
-    playerManager.updateSocket(
-        username,
-        socket.id
-    );
 
-});
+            console.log(
+                "REGISTER PLAYER:",
+                username
+            );
 
-        socket.on("submitAnswer",(answer)=>{
+
+            socket.username = username;
+
+
+            playerManager.updateSocket(
+                username,
+                socket.id
+            );
+
+
+        });
+
+
+
+        socket.on("submitAnswer", (answer) => {
+
 
             gameManager.submitAnswer(
                 socket.id,
                 answer
             );
 
+
         });
 
-        socket.on("playAgain",(username)=>{
+
+
+        socket.on("playAgain", () => {
+
 
             console.log(
-                "PLAY AGAIN:",
-                username
+                "PLAY AGAIN"
             );
 
-            playerManager.removePlayer(
-                username
-            );
+
+            playerManager.resetPlayers();
+
+
+            resetGame();
+
 
             sendLobbyUpdate();
 
-            socket.emit(
-                "backToLobby"
-            );
 
         });
 
-        socket.on("disconnect",()=>{
 
-    console.log(
-        "Disconnected:",
-        socket.id
-    );
 
-    playerManager.removePlayer(
-        socket.id
-    );
 
-    if(playerManager.getPlayerCount() === 0){
 
-        gameState.started = false;
-        gameState.currentRound = 0;
-        gameState.gameFinished = false;
+        socket.on("disconnect", () => {
 
-        clearInterval(
-            gameState.timer
-        );
 
-        console.log(
-            "GAME RESET - NO PLAYERS"
-        );
+            console.log(
+                "DISCONNECTED:",
+                socket.id
+            );
 
-    }
 
-    sendLobbyUpdate();
+            playerManager.removePlayer(
+                socket.id
+            );
 
-});
+
+            if(
+                playerManager.getPlayerCount() === 0
+            ){
+
+                console.log(
+                    "NO PLAYERS - RESET GAME"
+                );
+
+
+                resetGame();
+
+            }
+
+
+            sendLobbyUpdate();
+
+
+        });
+
+
+
     });
 
+
+
+
+
     function sendLobbyUpdate(){
+
 
         io.emit(
             "playersUpdate",
             playerManager.getPlayers()
         );
 
+
         io.emit(
             "waiting",
             playerManager.getPlayerCount()
         );
 
+
     }
+
+
+
+
 
     function checkStart(){
 
+
         const count =
         playerManager.getPlayerCount();
+
+
+
+        console.log(
+            "PLAYER COUNT:",
+            count
+        );
+
+
 
         if(
             count >= 3 &&
@@ -135,52 +187,149 @@ module.exports = (io)=>{
             !gameState.started
         ){
 
+            console.log(
+                "START COUNTDOWN"
+            );
+
+
             countdownRunning = true;
+
 
             startCountdown();
 
         }
 
+
     }
+
+
+
+
+
+
 
     function startCountdown(){
 
+
         let time = 5;
+
+
 
         io.emit(
             "gameCountdown",
             time
         );
 
-        const timer = setInterval(()=>{
+
+
+        countdownTimer =
+        setInterval(() => {
+
+
 
             time--;
+
+
 
             io.emit(
                 "gameCountdown",
                 time
             );
 
+
+
             if(time <= 0){
 
-                clearInterval(timer);
+
+
+                clearInterval(
+                    countdownTimer
+                );
+
+
+
+                countdownTimer = null;
+
 
                 countdownRunning = false;
+
+
 
                 io.emit(
                     "gameStarted"
                 );
 
-                setTimeout(()=>{
+
+
+                setTimeout(() => {
+
+
 
                     gameManager.startGame();
 
+
+
                 },1000);
+
+
 
             }
 
+
+
         },1000);
 
+
+
     }
+
+
+
+
+
+
+
+    function resetGame(){
+
+
+        gameState.started = false;
+
+        gameState.gameFinished = false;
+
+        gameState.currentRound = 0;
+
+        gameState.answer = "";
+
+        gameState.category = "";
+
+        gameState.shuffledWord = "";
+
+
+
+        clearInterval(
+            gameState.timer
+        );
+
+
+
+        if(countdownTimer){
+
+            clearInterval(
+                countdownTimer
+            );
+
+            countdownTimer = null;
+
+        }
+
+
+
+        countdownRunning = false;
+
+
+
+    }
+
+
 
 };
