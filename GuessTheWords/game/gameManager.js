@@ -4,6 +4,7 @@ const playerManager = require("./playerManager");
 
 let io;
 
+
 function initialize(socketIO){
 
     io = socketIO;
@@ -11,11 +12,18 @@ function initialize(socketIO){
 }
 
 
-function resetGameState(){
+
+function resetGame(){
+
+    console.log(
+        "RESETTING GAME STATE"
+    );
+
 
     clearInterval(
         gameState.timer
     );
+
 
     gameState.started = false;
 
@@ -33,18 +41,21 @@ function resetGameState(){
 
     gameState.timer = null;
 
+
 }
+
+
 
 
 
 function startGame(){
 
     console.log(
-        "GAME START"
+        "========== GAME START =========="
     );
 
 
-    resetGameState();
+    resetGame();
 
 
     gameState.started = true;
@@ -56,9 +67,18 @@ function startGame(){
     playerManager.resetScores();
 
 
+    console.log(
+        "PLAYERS:",
+        playerManager.getPlayers()
+    );
+
+
     startNextRound();
 
+
 }
+
+
 
 
 
@@ -70,13 +90,16 @@ function startNextRound(){
     );
 
 
+
     gameState.currentRound++;
 
 
+
     console.log(
-        "CURRENT ROUND:",
+        "ROUND:",
         gameState.currentRound
     );
+
 
 
     if(
@@ -100,7 +123,7 @@ function startNextRound(){
     if(!word){
 
         console.log(
-            "NO WORD FOUND"
+            "NO WORD AVAILABLE"
         );
 
         endGame();
@@ -125,6 +148,7 @@ function startNextRound(){
 
 
     let count = 3;
+
 
 
     io.emit(
@@ -165,7 +189,9 @@ function startNextRound(){
     },1000);
 
 
+
 }
+
 
 
 
@@ -245,6 +271,7 @@ function startRound(){
         }
 
 
+
     },1000);
 
 
@@ -254,10 +281,11 @@ function startRound(){
 
 
 
-function submitAnswer(
-    socketId,
-    answer
-){
+
+
+
+function submitAnswer(socketId, answer){
+
 
 
     if(
@@ -288,8 +316,8 @@ function submitAnswer(
 
         return;
 
-    }
 
+    }
 
 
 
@@ -321,8 +349,10 @@ function submitAnswer(
             username:
             player.username,
 
+
             answer:
             gameState.answer,
+
 
             scoreboard:
             playerManager.getScoreboard()
@@ -347,11 +377,14 @@ function submitAnswer(
 
 
 
+
+
+
 function endGame(){
 
 
     console.log(
-        "GAME OVER"
+        "========== GAME OVER =========="
     );
 
 
@@ -379,47 +412,40 @@ function endGame(){
 
 
 
+    let winner = {
+
+        username:"No Winner",
+
+        score:0
+
+    };
+
+
+
+    if(scoreboard.length > 0){
+
+        winner = scoreboard[0];
+
+    }
+
+
+
     io.emit(
         "gameOver",
         {
 
-            winner:
-            scoreboard.length > 0
-            ? scoreboard[0]
-            : {
-                username:"No Winner",
-                score:0
-            },
+            winner:winner,
 
-
-            scoreboard:
-            scoreboard
+            scoreboard:scoreboard
 
         }
     );
 
 
 
-    setTimeout(()=>{
-
-
-        playerManager.resetPlayers();
-
-
-        resetGameState();
-
-
-
-        console.log(
-            "GAME RESET AFTER END"
-        );
-
-
-    },3000);
-
-
-
 }
+
+
 
 
 
@@ -429,6 +455,8 @@ module.exports = {
 
     startGame,
 
-    submitAnswer
+    submitAnswer,
+
+    resetGame
 
 };
