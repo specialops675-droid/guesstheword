@@ -20,9 +20,9 @@ function resetGame(){
     );
 
 
-    clearInterval(
-        gameState.timer
-    );
+    console.log("CORRECT ANSWER");
+clearInterval(gameState.timer);
+console.log("TIMER CLEARED");
 
 
     gameState.started = false;
@@ -99,7 +99,7 @@ function startNextRound(){
 
 
     console.log(
-        "ROUND:",
+         "START ROUND",
         gameState.currentRound
     );
 
@@ -201,6 +201,11 @@ function startNextRound(){
 
 function startRound(){
 
+    clearInterval(
+        gameState.timer
+    );
+
+    gameState.timer = null;
 
     gameState.roundTime = 30;
 
@@ -247,9 +252,11 @@ function startRound(){
         ){
 
 
-            clearInterval(
-                gameState.timer
-            );
+             clearInterval(
+        gameState.timer
+    );
+
+    gameState.timer = null;
 
 
 
@@ -328,7 +335,7 @@ function submitAnswer(socketId, answer){
         gameState.timer
     );
 
-
+gameState.timer = null;
 
     const player =
     playerManager.addScore(
