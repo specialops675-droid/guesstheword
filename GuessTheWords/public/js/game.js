@@ -70,12 +70,7 @@ socket.on("connect",()=>{
     );
 
 
-    if(username){
-
-    socket.emit(
-        "joinGame",
-        username
-    );
+   if(username){
 
     socket.emit(
         "registerGamePlayer",
