@@ -237,6 +237,33 @@ function getScoreboard(){
 
 
 }
+function setReady(username){
+
+    const player =
+    gameState.players.find(
+        p => p.username === username
+    );
+
+    if(player){
+
+        player.ready = true;
+
+        console.log(
+            "PLAYER READY:",
+            username
+        );
+
+    }
+
+}
+
+function getReadyCount(){
+
+    return gameState.players.filter(
+        p => p.ready
+    ).length;
+
+}
 function resetReady(){
 
     gameState.players.forEach(player => {
@@ -262,6 +289,8 @@ module.exports = {
     resetScores,
     resetPlayers,
     getScoreboard,
+    setReady,
+    getReadyCount,
     resetReady
 
 };
