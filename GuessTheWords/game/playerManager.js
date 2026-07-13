@@ -24,16 +24,17 @@ function addPlayer(socketId, username){
     }
 
 
+player = {
 
-    player = {
+    socketId: socketId,
 
-        socketId: socketId,
+    username: username,
 
-        username: username,
+    score: 0,
 
-        score: 0
+    ready: false
 
-    };
+};
 
 
 
@@ -236,7 +237,15 @@ function getScoreboard(){
 
 
 }
+function resetReady(){
 
+    gameState.players.forEach(player => {
+
+        player.ready = false;
+
+    });
+
+}
 
 
 
@@ -252,6 +261,7 @@ module.exports = {
     addScore,
     resetScores,
     resetPlayers,
-    getScoreboard
+    getScoreboard,
+    resetReady
 
 };
