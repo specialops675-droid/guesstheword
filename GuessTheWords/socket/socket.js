@@ -21,6 +21,7 @@ module.exports = (io) => {
        socket.on("joinGame", (username) => {
 
     socket.username = username;
+    playerManager.setReady(username);
 
     const existing =
     playerManager.getPlayers().find(
@@ -203,7 +204,7 @@ module.exports = (io) => {
 
 
         const count =
-        playerManager.getPlayerCount();
+playerManager.getReadyCount();
 
 
 
