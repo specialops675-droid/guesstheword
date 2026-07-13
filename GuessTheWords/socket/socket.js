@@ -51,7 +51,7 @@ module.exports = (io) => {
 
 
 
-        socket.on("registerGamePlayer", (username) => {
+       socket.on("registerGamePlayer", (username) => {
 
     console.log(
         "REGISTER PLAYER:",
@@ -61,18 +61,10 @@ module.exports = (io) => {
 
     socket.username = username;
 
-    const player =
-    playerManager.addPlayer(
-        socket.id,
-        username
+    playerManager.updateSocket(
+        username,
+        socket.id
     );
-
-    if(player){
-
-        player.socketId =
-        socket.id;
-
-    }
 
     if(gameState.started){
 
@@ -120,22 +112,17 @@ module.exports = (io) => {
 
         socket.on("playAgain", () => {
 
+    console.log(
+        "PLAY AGAIN"
+    );
 
-            console.log(
-                "PLAY AGAIN"
-            );
+    playerManager.resetReady();
 
+    resetGame();
 
-            playerManager.resetPlayers();
+    sendLobbyUpdate();
 
-
-            resetGame();
-
-
-            sendLobbyUpdate();
-
-
-        });
+});
 
 
 
