@@ -1,78 +1,12 @@
 const socket = io();
 
-const username =
-sessionStorage.getItem("username");
+const username = sessionStorage.getItem("username");
 
 console.log(
     "GAME USER:",
     username
 );
 
-socket.on("connect", () => {
-
-    console.log(
-        "SOCKET CONNECTED:",
-        socket.id
-    );
-
-    if(username){
-
-        console.log(
-            "REGISTERING:",
-            username
-        );
-
-        socket.emit(
-            "registerGamePlayer",
-            username
-        );
-
-    }else{
-
-        console.log(
-            "NO USERNAME FOUND"
-        );
-
-    }
-
-});const socket = io();
-
-const username =
-sessionStorage.getItem("username");
-
-console.log(
-    "GAME USER:",
-    username
-);
-
-socket.on("connect", () => {
-
-    console.log(
-        "SOCKET CONNECTED:",
-        socket.id
-    );
-
-    if(username){
-
-        console.log(
-            "REGISTERING:",
-            username
-        );
-
-        socket.emit(
-            "registerGamePlayer",
-            username
-        );
-
-    }else{
-
-        console.log(
-            "NO USERNAME FOUND"
-        );
-
-    }
-
-});
 
 const roundText = document.getElementById("round");
 const categoryText = document.getElementById("category");
@@ -88,57 +22,113 @@ const winnerName = document.getElementById("winnerName");
 const finalScoreboard = document.getElementById("finalScoreboard");
 const playAgainBtn = document.getElementById("playAgainBtn");
 
+
+// hide winner screen on entry
 if(winnerScreen){
 
     winnerScreen.style.display = "none";
 
 }
 
-submitBtn.onclick = () => {
 
-    const answer =
-    answerInput.value.trim();
 
-    if(answer === ""){
+// connect player
+socket.on("connect",()=>{
 
-        message.innerHTML =
-        "⚠️ Please enter an answer";
+    console.log(
+        "CONNECTED:",
+        socket.id
+    );
 
-        return;
+
+    if(username){
+
+        socket.emit(
+            "registerGamePlayer",
+            username
+        );
 
     }
 
-    socket.emit(
-        "submitAnswer",
-        answer
-    );
+});
 
-    answerInput.value = "";
 
-};
 
-answerInput.addEventListener(
-    "keypress",
-    (e)=>{
+// submit answer
+if(submitBtn){
 
-        if(e.key === "Enter"){
+    submitBtn.onclick = ()=>{
 
-            submitBtn.click();
+
+        const answer =
+        answerInput.value.trim();
+
+
+        if(answer === ""){
+
+            message.innerHTML =
+            "⚠️ Please enter an answer";
+
+            return;
 
         }
 
-    }
-);
+
+        socket.emit(
+            "submitAnswer",
+            answer
+        );
+
+
+        answerInput.value = "";
+
+    };
+
+}
+
+
+
+if(answerInput){
+
+    answerInput.addEventListener(
+        "keypress",
+        (e)=>{
+
+            if(e.key === "Enter"){
+
+                submitBtn.click();
+
+            }
+
+        }
+    );
+
+}
+
+
+
+// countdown
+socket.on("gameCountdown",(time)=>{
+
+    message.innerHTML =
+    "Game starts in " + time;
+
+});
+
+
 
 socket.on("roundCountdown",(time)=>{
 
     message.innerHTML =
-    "Round starts in " +
-    time;
+    "Round starts in " + time;
 
 });
 
+
+
+// new round
 socket.on("newRound",(data)=>{
+
 
     roundText.innerHTML =
     "Round " +
@@ -146,79 +136,114 @@ socket.on("newRound",(data)=>{
     " / " +
     data.total;
 
+
     categoryText.innerHTML =
     "Category: " +
     data.category;
 
+
     wordText.innerHTML =
     data.word;
+
 
     timerText.innerHTML =
     "Time: 30";
 
+
     answerInput.disabled = false;
+
     submitBtn.disabled = false;
+
 
     message.innerHTML = "";
 
+
 });
 
+
+
+
+// timer
 socket.on("timer",(time)=>{
 
     timerText.innerHTML =
-    "Time: " +
-    time;
+    "Time: " + time;
 
 });
 
+
+
+
+// wrong
 socket.on("wrongAnswer",()=>{
 
     message.innerHTML =
-    "❌ Wrong Answer!";
+    "❌ Wrong Answer";
 
 });
 
+
+
+
+// correct
 socket.on("correctAnswer",(data)=>{
+
 
     message.innerHTML =
     "✅ " +
     data.username +
-    " got the correct answer! (" +
-    data.answer +
-    ")";
+    " got the answer!";
+
 
     answerInput.disabled = true;
+
     submitBtn.disabled = true;
+
 
     updateScoreboard(
         data.scoreboard
     );
 
+
 });
 
+
+
+
+// time up
 socket.on("timeUp",(data)=>{
 
+
     message.innerHTML =
-    "⏰ Time Up! Correct Answer: " +
+    "⏰ Time Up! Answer: " +
     data.answer;
 
+
     answerInput.disabled = true;
+
     submitBtn.disabled = true;
 
-});
-
-socket.on("gameCountdown",(time)=>{
-
-    message.innerHTML =
-    "Game starts in " +
-    time;
 
 });
 
+
+
+
+
+// game over
 socket.on("gameOver",(data)=>{
+
+
+    if(!data.winner){
+
+        return;
+
+    }
+
 
     winnerScreen.style.display =
     "block";
+
 
     winnerName.innerHTML =
     "🏆 Winner: " +
@@ -226,49 +251,74 @@ socket.on("gameOver",(data)=>{
     " - " +
     data.winner.score;
 
-    finalScoreboard.innerHTML =
-    "";
+
+
+    finalScoreboard.innerHTML = "";
+
 
     data.scoreboard.forEach(player=>{
 
+
         finalScoreboard.innerHTML += `
+
             <p>
                 ${player.username}
                 :
                 ${player.score}
             </p>
+
         `;
 
+
     });
+
 
 });
 
 
 
+
+
 function updateScoreboard(players){
+
 
     scoreboard.innerHTML = "";
 
+
     players.forEach(player=>{
 
+
         scoreboard.innerHTML += `
+
             <p>
                 ${player.username}
                 :
                 ${player.score}
             </p>
+
         `;
+
 
     });
 
+
 }
+
+
+
+
 
 if(playAgainBtn){
 
+
     playAgainBtn.onclick = ()=>{
 
-         window.location = "/gamelist";
+
+        window.location =
+        "/gamelist";
+
 
     };
+
 
 }
