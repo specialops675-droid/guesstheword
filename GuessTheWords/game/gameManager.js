@@ -65,7 +65,10 @@ function startGame(){
 
 
     playerManager.resetScores();
-
+io.emit(
+    "scoreboardUpdate",
+    playerManager.getScoreboard()
+);
 
     console.log(
         "PLAYERS:",
@@ -430,23 +433,37 @@ function endGame(){
 
 
 
-    io.emit(
-        "gameOver",
-        {
+   playerManager.resetReady();
 
-            winner:winner,
-
-            scoreboard:scoreboard
-
-        }
-    );
-
+io.emit(
+    "gameOver",
+    {
+        winner:winner,
+        scoreboard:scoreboard
+    }
+);
 
 
 }
 
 
+function setReady(username){
 
+    const player = gameState.players.find(
+        p => p.username === username
+    );
+
+    if(player){
+        player.ready = true;
+    }
+}
+
+function getReadyCount(){
+
+    return gameState.players.filter(
+        p => p.ready
+    ).length;
+}
 
 
 module.exports = {
