@@ -185,10 +185,10 @@ module.exports = (io) => {
     function sendLobbyUpdate(){
 
 
-        io.emit(
-            "playersUpdate",
-            playerManager.getPlayers()
-        );
+     io.emit(
+    "playersUpdate",
+    playerManager.getReadyPlayers()
+);
 
 
         io.emit(
