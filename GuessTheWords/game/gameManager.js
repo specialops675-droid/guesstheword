@@ -450,6 +450,16 @@ io.emit(
     }
 );
 
+setTimeout(()=>{
+
+    playerManager.resetPlayers();
+
+    console.log(
+        "PLAYERS CLEARED AFTER GAME"
+    );
+
+},1000);
+
 
 }
 
