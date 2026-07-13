@@ -205,6 +205,11 @@ socket.on("timer",(time)=>{
 
 });
 
+socket.on("scoreboardUpdate",(players)=>{
+
+    updateScoreboard(players);
+
+});
 
 
 
