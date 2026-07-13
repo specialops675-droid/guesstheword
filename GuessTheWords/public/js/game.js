@@ -30,7 +30,36 @@ if(winnerScreen){
 
 }
 
+socket.on(
+    "currentGameState",
+    (state)=>{
 
+        roundText.innerHTML =
+        "Round " +
+        state.currentRound +
+        " / " +
+        state.maxRounds;
+
+        categoryText.innerHTML =
+        "Category: " +
+        state.category;
+
+        wordText.innerHTML =
+        state.word;
+
+        timerText.innerHTML =
+        "Time: " +
+        state.roundTime;
+
+        answerInput.disabled = false;
+        submitBtn.disabled = false;
+
+        updateScoreboard(
+            state.scoreboard
+        );
+
+    }
+);
 
 // connect player
 socket.on("connect",()=>{
@@ -43,12 +72,17 @@ socket.on("connect",()=>{
 
     if(username){
 
-        socket.emit(
-            "registerGamePlayer",
-            username
-        );
+    socket.emit(
+        "joinGame",
+        username
+    );
 
-    }
+    socket.emit(
+        "registerGamePlayer",
+        username
+    );
+
+}
 
 });
 
