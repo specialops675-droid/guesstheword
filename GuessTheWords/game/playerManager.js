@@ -274,7 +274,13 @@ function resetReady(){
 
 }
 
+function getReadyPlayers(){
 
+    return gameState.players.filter(
+        p => p.ready
+    );
+
+}
 
 
 module.exports = {
@@ -291,6 +297,7 @@ module.exports = {
     getScoreboard,
     setReady,
     getReadyCount,
-    resetReady
+    resetReady,
+    getReadyPlayers
 
 };
