@@ -1,42 +1,28 @@
 const gameState = {
 
-
     players: [],
 
+    started: false,
 
-    started:false,
+    currentRound: 0,
 
+    maxRounds: 20,
 
-    currentRound:0,
+    category: "",
 
+    answer: "",
 
-    maxRounds:20,
+    shuffledWord: "",
 
+    roundTime: 30,
 
-    category:"",
+    timer: null,
 
+    countdownTimer: null,
 
-    answer:"",
-
-
-    shuffledWord:"",
-
-
-    roundTime:30,
-
-
-    timer:null,
-
-
-    countdownTimer:null,
-
-
-    gameFinished:false
-
+    gameFinished: false
 
 };
-
-
 
 
 module.exports = gameState;
