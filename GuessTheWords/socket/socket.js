@@ -80,19 +80,34 @@ module.exports = (io)=>{
 
         socket.on("disconnect",()=>{
 
-            console.log(
-                "Disconnected:",
-                socket.id
-            );
+    console.log(
+        "Disconnected:",
+        socket.id
+    );
 
-         //   playerManager.removePlayer(
-           //     socket.id
-           // );
+    playerManager.removePlayer(
+        socket.id
+    );
 
-          //  sendLobbyUpdate();
+    if(playerManager.getPlayerCount() === 0){
 
-        });
+        gameState.started = false;
+        gameState.currentRound = 0;
+        gameState.gameFinished = false;
 
+        clearInterval(
+            gameState.timer
+        );
+
+        console.log(
+            "GAME RESET - NO PLAYERS"
+        );
+
+    }
+
+    sendLobbyUpdate();
+
+});
     });
 
     function sendLobbyUpdate(){
