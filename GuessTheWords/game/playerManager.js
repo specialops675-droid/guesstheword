@@ -1,0 +1,132 @@
+const gameState = require("./gameState");
+
+function addPlayer(socketId, username){
+
+    let player = gameState.players.find(
+        p => p.username === username
+    );
+
+    if(player){
+
+        player.socketId = socketId;
+
+        console.log("PLAYER UPDATED:", player);
+
+        return player;
+    }
+
+    player = {
+        socketId: socketId,
+        username: username,
+        score: 0
+    };
+
+    gameState.players.push(player);
+
+    console.log("PLAYER ADDED:", player);
+
+    return player;
+}
+
+function updateSocket(username, socketId){
+
+    const player = gameState.players.find(
+        p => p.username === username
+    );
+
+    if(player){
+
+        player.socketId = socketId;
+
+        console.log("SOCKET UPDATED:", player);
+
+    }
+
+    return player;
+}
+
+function removePlayer(socketId){
+
+    gameState.players = gameState.players.filter(
+        p => p.socketId !== socketId
+    );
+
+    console.log(
+        "PLAYER REMOVED:",
+        socketId
+    );
+}
+
+function getPlayer(socketId){
+
+    return gameState.players.find(
+        p => p.socketId === socketId
+    );
+}
+
+function getPlayers(){
+
+    return gameState.players;
+}
+
+function getPlayerCount(){
+
+    return gameState.players.length;
+}
+
+function addScore(socketId){
+
+    const player = getPlayer(socketId);
+
+    if(player){
+
+        player.score++;
+
+        console.log(
+            player.username,
+            "score:",
+            player.score
+        );
+    }
+
+    return player;
+}
+
+function resetScores(){
+
+    gameState.players.forEach(player => {
+
+        player.score = 0;
+
+    });
+}
+
+function resetPlayers(){
+
+    gameState.players = [];
+}
+
+function getScoreboard(){
+
+    return gameState.players.map(player => ({
+
+        username: player.username,
+        score: player.score
+
+    }));
+}
+
+module.exports = {
+
+    addPlayer,
+    updateSocket,
+    removePlayer,
+    getPlayer,
+    getPlayers,
+    getPlayerCount,
+    addScore,
+    resetScores,
+    resetPlayers,
+    getScoreboard
+
+};

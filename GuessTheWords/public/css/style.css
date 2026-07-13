@@ -1,0 +1,499 @@
+*{
+    box-sizing:border-box;
+    font-family:'Arial', sans-serif;
+}
+
+
+
+body{
+
+    margin:0;
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
+
+}
+
+
+
+.container{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    padding:20px;
+
+}
+
+
+
+.game-card{
+
+
+    width:450px;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:25px;
+
+    text-align:center;
+
+
+    box-shadow:
+
+    0 20px 40px rgba(0,0,0,0.25);
+
+
+}
+
+
+
+
+
+h1{
+
+    margin:5px;
+
+    color:#333;
+
+}
+
+
+
+h2{
+
+    margin:10px;
+
+    color:#555;
+
+}
+
+
+
+h3{
+
+    color:#444;
+
+}
+
+
+
+
+
+
+
+.status-box{
+
+
+    margin-top:20px;
+
+    padding:20px;
+
+
+    background:
+
+    linear-gradient(
+
+        135deg,
+
+        #f3f4ff,
+
+        #ffffff
+
+    );
+
+
+    border-radius:20px;
+
+
+    border:2px solid #e5e7ff;
+
+
+}
+
+
+
+
+
+
+
+#category{
+
+
+    color:#667eea;
+
+    font-size:18px;
+
+
+}
+
+
+
+
+
+
+#word{
+
+
+    font-size:38px;
+
+    color:#764ba2;
+
+    letter-spacing:5px;
+
+    margin:15px 0;
+
+
+}
+
+
+
+
+
+
+
+#timer{
+
+
+    background:#667eea;
+
+    color:white;
+
+    padding:10px;
+
+    border-radius:12px;
+
+    display:inline-block;
+
+}
+
+
+
+
+
+
+
+
+.input-area{
+
+
+    margin-top:25px;
+
+    display:flex;
+
+    gap:10px;
+
+
+}
+
+
+
+
+
+input{
+
+
+    flex:1;
+
+    padding:14px;
+
+
+    border-radius:12px;
+
+
+    border:2px solid #ddd;
+
+
+    font-size:16px;
+
+
+}
+
+
+
+
+
+
+button{
+
+
+    padding:14px 25px;
+
+
+    border:none;
+
+
+    border-radius:12px;
+
+
+    background:#667eea;
+
+
+    color:white;
+
+
+    font-weight:bold;
+
+
+    cursor:pointer;
+
+
+    transition:.2s;
+
+
+}
+
+
+
+
+
+button:hover{
+
+
+    background:#5563c1;
+
+
+    transform:scale(1.05);
+
+
+}
+
+
+
+
+
+
+
+
+#message{
+
+
+    margin-top:20px;
+
+
+    min-height:30px;
+
+
+    color:#16a34a;
+
+
+    font-size:20px;
+
+
+}
+
+
+
+
+
+
+
+.players-box{
+
+
+    margin-top:25px;
+
+
+    background:#fafafa;
+
+
+    padding:20px;
+
+
+    border-radius:20px;
+
+
+}
+
+
+
+
+
+
+.players-box h2{
+
+
+    color:#333;
+
+
+}
+
+
+
+
+
+
+
+#scoreboard p{
+
+
+    margin:8px 0;
+
+
+    padding:12px;
+
+
+    background:#667eea;
+
+
+    color:white;
+
+
+    border-radius:12px;
+
+
+    font-weight:bold;
+
+
+    display:flex;
+
+
+    justify-content:space-between;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+@media(max-width:500px){
+
+
+    .game-card{
+
+
+        width:100%;
+
+
+    }
+
+
+
+    .input-area{
+
+
+        flex-direction:column;
+
+
+    }
+
+
+
+    button{
+
+
+        width:100%;
+
+
+    }
+
+
+}
+body{
+
+    background:#111827;
+
+    font-family:Arial,sans-serif;
+
+    margin:0;
+
+    padding:20px;
+
+}
+
+.container{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+}
+
+.game-card,
+.login{
+
+    background:white;
+
+    width:100%;
+
+    max-width:500px;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    box-sizing:border-box;
+
+}
+
+input,
+button{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    padding:12px;
+
+    margin-top:8px;
+
+}
+
+@media (max-width: 600px){
+
+    .game-card,
+    .login{
+
+        padding:15px;
+
+        border-radius:10px;
+
+    }
+
+    h1{
+
+        font-size:24px;
+
+    }
+
+    h2{
+
+        font-size:20px;
+
+    }
+
+    button{
+
+        font-size:16px;
+
+    }
+
+}

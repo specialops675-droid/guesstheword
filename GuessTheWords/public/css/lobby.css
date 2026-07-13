@@ -1,0 +1,115 @@
+body{
+
+background:#2563eb;
+
+color:white;
+
+font-family:Arial;
+
+text-align:center;
+
+padding-top:50px;
+
+}
+
+
+
+input{
+
+padding:10px;
+
+}
+
+
+
+button{
+
+padding:10px 20px;
+
+margin:10px;
+
+cursor:pointer;
+
+}
+body{
+
+    background:#111827;
+
+    font-family:Arial,sans-serif;
+
+    margin:0;
+
+    padding:20px;
+
+}
+
+.container{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+}
+
+.game-card,
+.login{
+
+    background:white;
+
+    width:100%;
+
+    max-width:500px;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    box-sizing:border-box;
+
+}
+
+input,
+button{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    padding:12px;
+
+    margin-top:8px;
+
+}
+
+@media (max-width: 600px){
+
+    .game-card,
+    .login{
+
+        padding:15px;
+
+        border-radius:10px;
+
+    }
+
+    h1{
+
+        font-size:24px;
+
+    }
+
+    h2{
+
+        font-size:20px;
+
+    }
+
+    button{
+
+        font-size:16px;
+
+    }
+
+}
