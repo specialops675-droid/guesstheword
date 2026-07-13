@@ -18,53 +18,86 @@ module.exports = (io) => {
         );
 
 
-        socket.on("joinGame", (username) => {
+       socket.on("joinGame", (username) => {
 
-            socket.username = username;
+    socket.username = username;
 
+    const existing =
+    playerManager.getPlayers().find(
+        p => p.username === username
+    );
 
-            const player =
-            playerManager.addPlayer(
-                socket.id,
-                username
-            );
+    const player =
+    playerManager.addPlayer(
+        socket.id,
+        username
+    );
 
+    if(!existing && player){
 
-            if(player){
+        player.score = 0;
 
-                player.score = 0;
+    }
 
-            }
+    sendLobbyUpdate();
 
+    checkStart();
 
-            sendLobbyUpdate();
-
-            checkStart();
-
-
-        });
+});
 
 
 
         socket.on("registerGamePlayer", (username) => {
 
+    console.log(
+        "REGISTER PLAYER:",
+        username,
+        socket.id
+    );
 
-            console.log(
-                "REGISTER PLAYER:",
-                username
-            );
+    socket.username = username;
 
+    const player =
+    playerManager.addPlayer(
+        socket.id,
+        username
+    );
 
-            socket.username = username;
+    if(player){
 
+        player.socketId =
+        socket.id;
 
-            playerManager.updateSocket(
-                username,
-                socket.id
-            );
+    }
 
+    if(gameState.started){
 
-        });
+        socket.emit(
+            "currentGameState",
+            {
+                currentRound:
+                gameState.currentRound,
+
+                maxRounds:
+                gameState.maxRounds,
+
+                category:
+                gameState.category,
+
+                word:
+                gameState.shuffledWord,
+
+                roundTime:
+                gameState.roundTime,
+
+                scoreboard:
+                playerManager.getScoreboard()
+            }
+        );
+
+    }
+
+});
 
 
 
